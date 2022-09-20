@@ -6,8 +6,8 @@ import "./App.css";
 function App() {
   return (
     <div>
-      <Circle bgColor="teal" />
-      <Circle bgColor="blue" />
+      <Circle bgColor="orange" borderColor="yellow" />
+      <Circle bgColor="pink" text="lalala" />
     </div>
   );
 }
