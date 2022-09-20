@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useState } from "react";
 
 const Container = styled.div<ContainerProps>`
   width: 200px;
@@ -23,6 +24,8 @@ const Circle = ({
   borderColor,
   text = "default text",
 }: CircleProps) => {
+  const [counter, setCounter] = useState<string | number>(1);
+
   return (
     <Container bgColor={bgColor} borderColor={borderColor ?? bgColor}>
       {text}
