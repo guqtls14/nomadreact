@@ -43,6 +43,17 @@ const Loading = styled.div`
   text-align: center;
 `;
 
+const Img = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 20px;
+`;
+
+const CoinWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 // const coins = [
 //   {
 //     id: "btc-bitcoin",
@@ -111,7 +122,14 @@ const Coins = () => {
         <CoinsList>
           {coins.map((item) => (
             <Coin key={item.id}>
-              <Link to={`/${item.id}`}>{item.name} &rarr;</Link>
+              <Link to={`/${item.id}`} state={{ name: item.name }}>
+                <CoinWrapper>
+                  <Img
+                    src={`https://coinicons-api.vercel.app/api/icon/${item.symbol.toLowerCase()}`}
+                  />
+                  {item.name} &rarr;
+                </CoinWrapper>
+              </Link>
             </Coin>
           ))}
         </CoinsList>
