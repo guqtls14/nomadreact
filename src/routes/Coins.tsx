@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useQueries, useQuery } from "react-query";
+import { fetchCoins } from "./api";
 
 const Container = styled.div`
   padding: 0 20px;
@@ -85,7 +87,7 @@ const CoinWrapper = styled.div`
 // ];
 
 // type
-interface CoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -96,31 +98,35 @@ interface CoinInterface {
 }
 
 const Coins = () => {
-  const [coins, setData] = useState<CoinInterface[]>([]);
-  // loading
-  const [loading, setLoading] = useState(false);
-  const dataFunc = async () => {
-    setLoading(true);
-    const response = await axios.get("https://api.coinpaprika.com/v1/coins");
-    const res = response.data;
-    setData(res.slice(0, 100));
-    setLoading(false);
-  };
+  // react query fetching
+  // useQuery는 fetcher함수를 불러들이는데 fetcher함수는 여기서 api.ts에있는 코드임
+  const { isLoading, data } = useQuery<ICoin[]>("allcoins", fetchCoins);
 
-  useEffect(() => {
-    dataFunc();
-  }, []);
+  // const [coins, setData] = useState<CoinInterface[]>([]);
+  // // loading
+  // const [loading, setLoading] = useState(false);
+  // const dataFunc = async () => {
+  //   setLoading(true);
+  //   const response = await axios.get("https://api.coinpaprika.com/v1/coins");
+  //   const res = response.data;
+  //   setData(res.slice(0, 100));
+  //   setLoading(false);
+  // };
+
+  // useEffect(() => {
+  //   dataFunc();
+  // }, []);
 
   return (
     <Container>
       <Header>
         <Title>Coins</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loading>"Loading.."</Loading>
       ) : (
         <CoinsList>
-          {coins.map((item) => (
+          {data?.slice(0, 100).map((item) => (
             <Coin key={item.id}>
               <Link to={`/${item.id}`} state={{ name: item.name }}>
                 <CoinWrapper>
