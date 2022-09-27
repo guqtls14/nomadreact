@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useLocation, Outlet, Link, NavLink, useMatch } from "react-router-dom";
-import axios from "axios";
+
 import styled from "styled-components";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { fetchCoinInfo, fetchCoinTickers } from "./api";
 
 const Container = styled.div`
   padding: 0 20px;
@@ -172,14 +173,13 @@ const Coin = () => {
   // useMatch
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
-  // console.log("1", priceMatch);
-  // console.log("2", priceMatch?.pattern.end);
-  // info
-  const [info, setinfo] = useState<IInfoData>();
-  // price
-  const [priceinfo, setPriceInfo] = useState<IPriceData>();
-  // loading
-  const [loading, setLoading] = useState(true);
+
+  // // info
+  // const [info, setinfo] = useState<IInfoData>();
+  // // price
+  // const [priceinfo, setPriceInfo] = useState<IPriceData>();
+  // // loading
+  // const [loading, setLoading] = useState(true);
 
   const {
     // state: { name },
@@ -187,38 +187,51 @@ const Coin = () => {
   } = useLocation(); // location.state.name
 
   const { coinId } = useParams();
-  //   console.log(useParams()); {coinId: '22'}
 
+  // react-query 비동기처리
+  // coin info
+  const { isLoading: infoLoading, data: infoData } = useQuery(
+    ["info", coinId],
+    () => fetchCoinInfo(coinId!)
+  );
+  // coin price
+  const { isLoading: tickersLoading, data: tickersData } = useQuery(
+    ["ticker", coinId],
+    () => fetchCoinTickers(coinId!)
+  );
+  // useEffect 비동기처리
   // info data
-  const InfoData = async () => {
-    const response = await axios.get(
-      `https://api.coinpaprika.com/v1/coins/${coinId}`
-    );
-    const res = response.data;
-    setinfo(res);
-  };
-  // price data
-  const PriceData = async () => {
-    const response = await axios.get(
-      `https://api.coinpaprika.com/v1/tickers/${coinId}`
-    );
-    const res = response.data;
-    setPriceInfo(res);
-  };
-  // useEffect
-  useEffect(() => {
-    InfoData();
-    PriceData();
-    setLoading(false);
-  }, [coinId]);
-  console.log("info: ", info);
-  console.log("priceinfo: ", priceinfo);
+  // const InfoData = async () => {
+  //   const response = await axios.get(
+  //     `https://api.coinpaprika.com/v1/coins/${coinId}`
+  //   );
+  //   const res = response.data;
+  //   setinfo(res);
+  // };
+  // // price data
+  // const PriceData = async () => {
+  //   const response = await axios.get(
+  //     `https://api.coinpaprika.com/v1/tickers/${coinId}`
+  //   );
+  //   const res = response.data;
+  //   setPriceInfo(res);
+  // };
+  // // useEffect
+  // useEffect(() => {
+  //   InfoData();
+  //   PriceData();
+  //   setLoading(false);
+  // }, [coinId]);
+
+  // loading 변수(로딩 종류가 2개이므로..)
+  const loading = infoLoading || tickersLoading;
+
   return (
     <Container>
       <Header>
         <Title>
           {/* {state?.name || "loading..."} */}
-          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
       {loading ? (
@@ -228,26 +241,26 @@ const Coin = () => {
           <Wrapper>
             <Bundle>
               <span>Rank</span>
-              <span>{priceinfo?.rank}</span>
+              <span>{tickersData?.rank}</span>
             </Bundle>
             <Bundle>
               <span>SYMBOL</span>
-              <span>{priceinfo?.symbol}</span>
+              <span>{tickersData?.symbol}</span>
             </Bundle>
             <Bundle>
               <span>first_data</span>
-              <span>{info?.first_data_at}</span>
+              <span>{infoData?.first_data_at}</span>
             </Bundle>
           </Wrapper>
-          <Descript>{info?.description}</Descript>
+          <Descript>{infoData?.description}</Descript>
           <Wrapper>
             <Bundle>
               <span>TOTAL SUPLY:</span>
-              <span>{priceinfo?.total_supply}</span>
+              <span>{tickersData?.total_supply}</span>
             </Bundle>
             <Bundle>
               <span>MAX SUPPLY:</span>
-              <span>{priceinfo?.max_supply}</span>
+              <span>{tickersData?.max_supply}</span>
             </Bundle>
           </Wrapper>
           <Tabs>
