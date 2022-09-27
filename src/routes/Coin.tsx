@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useLocation, Outlet } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
 import { useEffect, useState } from "react";
+
 const Container = styled.div`
   padding: 0 20px;
 `;
@@ -20,6 +21,36 @@ const Loading = styled.div`
 `;
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
+  font-size: 40px;
+`;
+
+// detail component
+
+// Wrapper
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+`;
+
+const Bundle = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  span:first-child {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+`;
+
+// descript component
+const Descript = styled.p`
+  margin: 20px 0px;
 `;
 
 // 여기는 안쓰지만 이중 타입(?)의 예시로 만들어봄
@@ -149,15 +180,50 @@ const Coin = () => {
   useEffect(() => {
     InfoData();
     PriceData();
-  }, []);
+    setLoading(false);
+  }, [coinId]);
   console.log("info: ", info);
   console.log("priceinfo: ", priceinfo);
   return (
     <Container>
       <Header>
-        <Title>{state?.name || "loading..."}</Title>
+        <Title>
+          {/* {state?.name || "loading..."} */}
+          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+        </Title>
       </Header>
-      {loading ? <Loading>Loading...</Loading> : null}
+      {loading ? (
+        <Loading>Loading...</Loading>
+      ) : (
+        <>
+          <Wrapper>
+            <Bundle>
+              <span>Rank</span>
+              <span>{priceinfo?.rank}</span>
+            </Bundle>
+            <Bundle>
+              <span>SYMBOL</span>
+              <span>{priceinfo?.symbol}</span>
+            </Bundle>
+            <Bundle>
+              <span>first_data</span>
+              <span>{info?.first_data_at}</span>
+            </Bundle>
+          </Wrapper>
+          <Descript>{info?.description}</Descript>
+          <Wrapper>
+            <Bundle>
+              <span>TOTAL SUPLY:</span>
+              <span>{priceinfo?.total_supply}</span>
+            </Bundle>
+            <Bundle>
+              <span>MAX SUPPLY:</span>
+              <span>{priceinfo?.max_supply}</span>
+            </Bundle>
+          </Wrapper>
+          <Outlet />
+        </>
+      )}
     </Container>
   );
 };
