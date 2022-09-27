@@ -199,6 +199,10 @@ const Coin = () => {
     ["ticker", coinId],
     () => fetchCoinTickers(coinId!)
   );
+
+  // https://stackoverflow.com/questions/54496398/typescript-type-string-undefined-is-not-assignable-to-type-string/54496418
+  // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html#non-null-assertion-operator
+
   // useEffect 비동기처리
   // info data
   // const InfoData = async () => {
