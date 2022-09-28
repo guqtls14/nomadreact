@@ -7,6 +7,9 @@ import { fetchCoins } from "./api";
 
 import { Helmet } from "react-helmet";
 
+// recoil
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atom";
 const Container = styled.div`
   padding: 0 20px;
 `;
@@ -106,24 +109,13 @@ interface ICoin {
 interface IRouterProps {}
 
 const Coins = () => {
+  // atom value 설정할때사용
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+
   // react query fetching
   // useQuery는 fetcher함수를 불러들이는데 fetcher함수는 여기서 api.ts에있는 코드임
   const { isLoading, data } = useQuery<ICoin[]>("allcoins", fetchCoins);
-
-  // const [coins, setData] = useState<CoinInterface[]>([]);
-  // // loading
-  // const [loading, setLoading] = useState(false);
-  // const dataFunc = async () => {
-  //   setLoading(true);
-  //   const response = await axios.get("https://api.coinpaprika.com/v1/coins");
-  //   const res = response.data;
-  //   setData(res.slice(0, 100));
-  //   setLoading(false);
-  // };
-
-  // useEffect(() => {
-  //   dataFunc();
-  // }, []);
 
   return (
     <Container>
@@ -132,7 +124,7 @@ const Coins = () => {
       </Helmet>
       <Header>
         <Title>Coins</Title>
-        <button>Toggle BTN</button>
+        <button onClick={toggleDarkAtom}>Toggle BTN</button>
       </Header>
       {isLoading ? (
         <Loading>"Loading.."</Loading>
