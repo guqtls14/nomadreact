@@ -80,9 +80,8 @@ const App = () => {
     <Fragment>
       {/* ThemeProvider를 index -> App으로옮긴이유는 state를 사용하기위함 -> 다른 component에도 props로 보내려고 여기로옮김 */}
       <ThemeProvider theme={isDark ? darktheme : lighttheme}>
-        <button onClick={toggleDark}>Toggle BTN</button>
         <GlobalStyle />
-        <Router />
+        <Router isDark={isDark} toggleDark={toggleDark} />
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
     </Fragment>

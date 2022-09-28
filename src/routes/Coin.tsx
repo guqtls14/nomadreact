@@ -171,6 +171,7 @@ interface IPriceData {
     };
   };
 }
+
 const Coin = () => {
   // useMatch
   const priceMatch = useMatch("/:coinId/price");

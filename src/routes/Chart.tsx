@@ -22,7 +22,12 @@ interface CharProps {
   coinId: string;
 }
 
-const Chart = () => {
+// toggleDark interface
+interface IRouterProps {
+  isDark: boolean;
+}
+
+const Chart = ({ isDark }: IRouterProps) => {
   // url에관한 정보를 얻는법은 2가지이다
   // 부모 컴포넌트(Outlet)에서 url에관한 정보를얻는 useOutletContext
   // useParams를 이용하는방법
@@ -67,7 +72,7 @@ const Chart = () => {
           height="460px"
           options={{
             theme: {
-              mode: "dark",
+              mode: isDark ? "dark" : "light",
             },
             chart: {
               height: 500,
