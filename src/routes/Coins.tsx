@@ -103,11 +103,9 @@ interface ICoin {
 }
 
 // toggleDark interface
-interface IRouterProps {
-  toggleDark: () => void;
-}
+interface IRouterProps {}
 
-const Coins = ({ toggleDark, isDark }: IRouterProps) => {
+const Coins = () => {
   // react query fetching
   // useQuery는 fetcher함수를 불러들이는데 fetcher함수는 여기서 api.ts에있는 코드임
   const { isLoading, data } = useQuery<ICoin[]>("allcoins", fetchCoins);
@@ -134,7 +132,7 @@ const Coins = ({ toggleDark, isDark }: IRouterProps) => {
       </Helmet>
       <Header>
         <Title>Coins</Title>
-        <button onClick={toggleDark}>Toggle BTN</button>
+        <button>Toggle BTN</button>
       </Header>
       {isLoading ? (
         <Loading>"Loading.."</Loading>

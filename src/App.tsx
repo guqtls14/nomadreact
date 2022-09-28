@@ -6,6 +6,10 @@ import { ReactQueryDevtools } from "react-query/devtools";
 
 import { ThemeProvider } from "styled-components";
 import { darktheme, lighttheme } from "./theme";
+// recoil
+import { useRecoilValue } from "recoil";
+
+import { isDarkAtom } from "./atom";
 
 const GlobalStyle = createGlobalStyle`
 /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -73,15 +77,14 @@ a{
 `;
 
 const App = () => {
-  const [isDark, setIsDark] = useState(false);
-  const toggleDark = () => setIsDark((current) => !current);
+  const isDark = useRecoilValue(isDarkAtom);
 
   return (
     <Fragment>
       {/* ThemeProvider를 index -> App으로옮긴이유는 state를 사용하기위함 -> 다른 component에도 props로 보내려고 여기로옮김 */}
       <ThemeProvider theme={isDark ? darktheme : lighttheme}>
         <GlobalStyle />
-        <Router isDark={isDark} toggleDark={toggleDark} />
+        <Router />
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
     </Fragment>

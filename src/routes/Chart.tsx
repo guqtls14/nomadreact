@@ -3,6 +3,11 @@ import { useParams } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { fetchCoinHistory } from "./api";
 
+// recoil
+import { useRecoilValue } from "recoil";
+
+import { isDarkAtom } from "../atom";
+
 // apexchart
 import ApexChart from "react-apexcharts";
 
@@ -27,7 +32,10 @@ interface IRouterProps {
   isDark: boolean;
 }
 
-const Chart = ({ isDark }: IRouterProps) => {
+const Chart = () => {
+  // recoil
+  const isDark = useRecoilValue(isDarkAtom);
+
   // url에관한 정보를 얻는법은 2가지이다
   // 부모 컴포넌트(Outlet)에서 url에관한 정보를얻는 useOutletContext
   // useParams를 이용하는방법
