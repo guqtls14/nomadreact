@@ -48,6 +48,8 @@ const Chart = () => {
       refetchInterval: 10000,
     }
   );
+
+  console.log("d1: ", data);
   return (
     <div>
       {isLoading ? (

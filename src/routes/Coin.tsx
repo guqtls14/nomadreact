@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLocation, Outlet, Link, NavLink, useMatch } from "react-router-dom";
 
 import styled from "styled-components";
@@ -199,11 +199,11 @@ const Coin = () => {
   // coin price
   const { isLoading: tickersLoading, data: tickersData } = useQuery(
     ["ticker", coinId],
-    () => fetchCoinTickers(coinId!),
+    () => fetchCoinTickers(coinId!)
     // refetch
-    {
-      refetchInterval: 5000,
-    }
+    // {
+    //   refetchInterval: 5000,
+    // }
   );
 
   // https://stackoverflow.com/questions/54496398/typescript-type-string-undefined-is-not-assignable-to-type-string/54496418
@@ -236,6 +236,9 @@ const Coin = () => {
   // loading 변수(로딩 종류가 2개이므로..)
   const loading = infoLoading || tickersLoading;
 
+  console.log("tickersData: ", tickersData);
+
+  const navigate = useNavigate();
   return (
     <Container>
       <Helmet>
@@ -249,6 +252,7 @@ const Coin = () => {
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
+      <button onClick={() => navigate(-1)}>Back</button>
       {loading ? (
         <Loading>Loading...</Loading>
       ) : (
