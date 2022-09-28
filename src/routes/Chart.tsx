@@ -2,6 +2,22 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { fetchCoinHistory } from "./api";
+
+// apexchart
+import ApexChart from "react-apexcharts";
+
+// apexchart
+interface IHistorical {
+  time_open: number;
+  time_close: number;
+  open: string;
+  high: string;
+  low: string;
+  close: string;
+  volume: string;
+  market_cap: string;
+}
+
 interface CharProps {
   coinId: string;
 }
@@ -20,14 +36,55 @@ const Chart = () => {
   // console.log("11", coinId); //11 bnb-binance-coin
 
   // react-query
-  const { isLoading, data } = useQuery(["ohlcv", coinId], () =>
-    // useOutletContext이용
-    // fetchCoinHistory(coinId)
+  const { isLoading, data } = useQuery<IHistorical[]>(
+    ["ohlcv", coinId],
+    () =>
+      // useOutletContext이용
+      // fetchCoinHistory(coinId)
 
-    // useParams이용해서 데이터넣기
-    fetchCoinHistory(params.coinId!)
+      // useParams이용해서 데이터넣기
+      fetchCoinHistory(params.coinId!),
+    {
+      refetchInterval: 10000,
+    }
   );
-  return <div>Chart</div>;
+  return (
+    <div>
+      {isLoading ? (
+        "Loading Chart.."
+      ) : (
+        <ApexChart
+          type="line"
+          series={[
+            {
+              name: "Price",
+              data: data?.map((price) => parseFloat(price.close)) as number[],
+            },
+          ]}
+          options={{
+            theme: {
+              mode: "dark",
+            },
+            chart: {
+              height: 500,
+              width: 500,
+              toolbar: { show: false },
+              background: "tranparent",
+            },
+            stroke: { curve: "smooth", width: 5 },
+            grid: { show: false },
+            yaxis: { show: false },
+            xaxis: { labels: { show: false } },
+            fill: {
+              type: "gradient",
+              gradient: { gradientToColors: ["blue"] },
+            },
+            colors: ["red"],
+          }}
+        />
+      )}
+    </div>
+  );
 };
 
 export default Chart;

@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { useQueries, useQuery } from "react-query";
+
+import { useQuery } from "react-query";
 import { fetchCoins } from "./api";
+
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   padding: 0 20px;
@@ -119,6 +121,9 @@ const Coins = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>코인</title>
+      </Helmet>
       <Header>
         <Title>Coins</Title>
       </Header>

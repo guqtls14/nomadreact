@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchCoinTickers } from "./api";
 
+import { Helmet } from "react-helmet";
+
 const Container = styled.div`
   padding: 0 20px;
 `;
@@ -197,7 +199,11 @@ const Coin = () => {
   // coin price
   const { isLoading: tickersLoading, data: tickersData } = useQuery(
     ["ticker", coinId],
-    () => fetchCoinTickers(coinId!)
+    () => fetchCoinTickers(coinId!),
+    // refetch
+    {
+      refetchInterval: 5000,
+    }
   );
 
   // https://stackoverflow.com/questions/54496398/typescript-type-string-undefined-is-not-assignable-to-type-string/54496418
@@ -232,6 +238,11 @@ const Coin = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {/* {state?.name || "loading..."} */}
@@ -252,8 +263,8 @@ const Coin = () => {
               <span>{tickersData?.symbol}</span>
             </Bundle>
             <Bundle>
-              <span>first_data</span>
-              <span>{infoData?.first_data_at}</span>
+              <span>Price:</span>
+              <span>${tickersData?.quotes.USD.price}</span>
             </Bundle>
           </Wrapper>
           <Descript>{infoData?.description}</Descript>
