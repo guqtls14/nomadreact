@@ -63,6 +63,8 @@ const Chart = () => {
               data: data?.map((price) => parseFloat(price.close)) as number[],
             },
           ]}
+          width="100%"
+          height="460px"
           options={{
             theme: {
               mode: "dark",

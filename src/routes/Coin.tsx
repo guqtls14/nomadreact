@@ -252,7 +252,7 @@ const Coin = () => {
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
-      <button onClick={() => navigate(-1)}>Back</button>
+      <button onClick={() => navigate("/")}>Back</button>
       {loading ? (
         <Loading>Loading...</Loading>
       ) : (

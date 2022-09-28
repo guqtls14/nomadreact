@@ -32,12 +32,7 @@ const Price = () => {
     //   refetchInterval: 10000,
     // }
   );
-  console.log("Data: ", data);
-  const y = data?.map((price) => parseFloat(price.high));
-  const y1 = data?.map((price) => parseFloat(price.low));
-  const y2 = data?.map((price) => parseFloat(price.close));
 
-  console.log("y1: ", y);
   return (
     <div>
       {isLoading ? (
@@ -48,42 +43,47 @@ const Price = () => {
           series={[
             {
               name: "Price",
-              // data: data?.map((price) => parseFloat(price.close)) as number[],
-              data: [
-                {
-                  x: new Date(),
-                  y: y,
-                },
-                {
-                  x: new Date(),
-                  y: y1,
-                },
-                {
-                  x: new Date(),
-                  y: y2,
-                },
-              ],
+              data: data.map((price) => ({
+                x: price.time_open * 1000,
+                y: [price.open, price.high, price.low, price.close],
+              })),
             },
           ]}
+          width="100%"
+          height="460px"
           options={{
-            // stroke: {
-            //   curve: "straight",
-            // },
             chart: {
-              height: 350,
+              toolbar: {
+                show: false,
+              },
+              background: "transparent",
+              fontFamily: '"Pretendard", sans-serif',
             },
+            xaxis: {
+              // labels: {
+              //   show: false,
+              // },
+              type: "datetime",
+              categories: data.map((price) => price.time_close * 1000),
+              axisTicks: {
+                show: false,
+              },
+              axisBorder: {
+                show: false,
+              },
+              tooltip: {
+                enabled: false,
+              },
+            },
+            // yaxis: {
+            //   labels: {
+            //     show: false,
+            //   },
+            // },
           }}
           title={{
             text: "CandleStick Chart",
             align: "left",
-          }}
-          xaxis={{
-            type: "datetime",
-          }}
-          yaxis={{
-            tooltip: {
-              enabled: true,
-            },
           }}
         />
       )}
