@@ -1,8 +1,11 @@
 import { createGlobalStyle } from "styled-components";
 import Router from "./Router";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 
 import { ReactQueryDevtools } from "react-query/devtools";
+
+import { ThemeProvider } from "styled-components";
+import { darktheme, lighttheme } from "./theme";
 
 const GlobalStyle = createGlobalStyle`
 /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -70,11 +73,18 @@ a{
 `;
 
 const App = () => {
+  const [isDark, setIsDark] = useState(false);
+  const toggleDark = () => setIsDark((current) => !current);
+
   return (
     <Fragment>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
+      {/* ThemeProvider를 index -> App으로옮긴이유는 state를 사용하기위함 -> 다른 component에도 props로 보내려고 여기로옮김 */}
+      <ThemeProvider theme={isDark ? darktheme : lighttheme}>
+        <button onClick={toggleDark}>Toggle BTN</button>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </Fragment>
   );
 };

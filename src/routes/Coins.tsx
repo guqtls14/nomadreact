@@ -18,11 +18,14 @@ const Header = styled.header`
   justify-content: center;
 `;
 
-const CoinsList = styled.ul``;
+const CoinsList = styled.ul`
+  margin: 0 auto;
+  width: 50%;
+`;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   margin-bottom: 10px;
   padding: 20px;
   border-radius: 15px;
