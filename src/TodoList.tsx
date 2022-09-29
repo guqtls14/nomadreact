@@ -86,6 +86,7 @@ const TodoList = () => {
         <span>{errors?.email?.message}</span>
         <input
           {...register("firstName", {
+            //!! 맨처음 아무것도없는상태로 입력하면 type이 required라서 메세지가 ~~is required이지만 form에입력하면 type이 minLength로바껴서 message도 your~~로 바뀜
             required: "firstName is required",
             minLength: {
               value: 5,
