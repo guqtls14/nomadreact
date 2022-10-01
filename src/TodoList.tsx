@@ -103,6 +103,14 @@ const TodoList = () => {
           {...register("firstName", {
             //!! 맨처음 아무것도없는상태로 입력하면 type이 required라서 메세지가 ~~is required이지만 form에입력하면 type이 minLength로바껴서 message도 your~~로 바뀜
             required: "firstName is required",
+            // 특정키워드가 포함안되면 에러안발생, 반환값은 boolean값
+            validate: {
+              noNico: (value) =>
+                value.includes("nico") ? "Don't include nico" : true,
+              noNick: (value) =>
+                value.includes("nick") ? "Don't include nick" : true,
+            },
+            // value.includes("nico") ? "Don't include nico" : true, //!value.includes("nico"), -> 이렇게하면 그냥 error만 콘솔에찍힘
             minLength: {
               value: 5,
               message: "Your firstName is to short",
