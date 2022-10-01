@@ -37,12 +37,19 @@ type IFormData = {
     lastName: {
       message: string;
     };
+    password: {
+      message: string;
+    };
+    CheckingPassword: {
+      message: string;
+    };
   };
   firstName: string;
   lastName: string;
   email: string;
-  // password: string;
-  // CheckingPassword: string;
+  password: string;
+  CheckingPassword: string;
+  extraError?: string;
 };
 
 // react-hook-form
@@ -54,6 +61,7 @@ const TodoList = () => {
     watch,
     handleSubmit,
     formState: { errors }, // useForm.formState.errors =const errors
+    setError,
   } = useForm<IFormData>({
     defaultValues: {
       firstName: "",
@@ -62,8 +70,15 @@ const TodoList = () => {
       // password: '',
     },
   });
-  const onValid = (data: any) => {
-    console.log(data);
+  const onValid = (data: IFormData) => {
+    if (data.password !== data.CheckingPassword) {
+      setError(
+        "CheckingPassword",
+        { message: "Password are not the same" },
+        { shouldFocus: true }
+      );
+    }
+    // setError("extraError", { message: "Server Offline." });
   };
   console.log("1", errors); //ex) email: {message:?,ref:input,type:'required'}
   return (
@@ -107,7 +122,32 @@ const TodoList = () => {
           placeholder="lastName"
         />
         <span>{errors?.lastName?.message}</span>
-        <button>Add</button>/{" "}
+        <input
+          {...register("password", {
+            required: "password is required!",
+            minLength: {
+              value: 8,
+              message: "your password is to short",
+            },
+          })}
+          placeholder="password"
+        />
+        <span>{errors?.password?.message}</span>
+        <input
+          {...register("CheckingPassword", {
+            required: "CheckingPassword is required!",
+            minLength: {
+              value: 8,
+              message: "your CheckingPassword is to short",
+            },
+          })}
+          placeholder="CheckingPassword"
+        />
+        {/* password Error message */}
+        <span>{errors?.CheckingPassword?.message}</span>
+        <button>Add</button>/ {/* extraError */}
+        {/* server Error message */}
+        <span>{errors?.extraError?.message}</span>
       </form>
     </div>
   );
