@@ -11,7 +11,7 @@ const TodoList = () => {
 
   return (
     <div>
-      <h1>To DOs</h1>
+      <h1>To Dos</h1>
       <hr />
 
       <CreateToDo />
