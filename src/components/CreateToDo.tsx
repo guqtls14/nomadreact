@@ -20,7 +20,7 @@ const CreateToDo = () => {
     ]);
     setValue("toDo", "");
   };
-
+  // handleSubmit은 form data를 받음(유효성에성공하면)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input

@@ -6,9 +6,8 @@ import { toDoState } from "../atoms";
 
 import ToDo from "./ToDo";
 const TodoList = () => {
-  // 밑에 2개를 합친것
   const toDos = useRecoilValue(toDoState);
-
+  console.log(toDos);
   return (
     <div>
       <h1>To Dos</h1>
