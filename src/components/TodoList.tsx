@@ -8,7 +8,7 @@ import ToDo from "./ToDo";
 import React from "react";
 const TodoList = () => {
   // const toDos = useRecoilValue(toDoState);
-  const [toDo, doing, done] = useRecoilValue(toDoSelector);
+  const toDos = useRecoilValue(toDoSelector);
   // 현재의value,수정하는함수
   const [category, setCategory] = useRecoilState(categoryState);
   // select value감지
@@ -25,12 +25,9 @@ const TodoList = () => {
         <option value="DONE">Done</option>
       </select>
       <CreateToDo />
-      {category === "TO_DO" &&
-        toDo.map((aToDo) => <ToDo key={aToDo.id} {...aToDo} />)}
-      {category === "DOING" &&
-        doing.map((aToDo) => <ToDo key={aToDo.id} {...aToDo} />)}
-      {category === "DONE" &&
-        done.map((aToDo) => <ToDo key={aToDo.id} {...aToDo} />)}
+      {toDos?.map((aToDo) => (
+        <ToDo key={aToDo.id} {...aToDo} />
+      ))}
     </div>
   );
 };
