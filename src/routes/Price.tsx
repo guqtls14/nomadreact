@@ -1,94 +1,77 @@
-import { useParams } from "react-router-dom";
-import { fetchCoinHistory } from "./api";
 import { useQuery } from "react-query";
-
-// apexchart
-interface IHistorical {
-  time_open: number;
-  time_close: number;
-  open: string;
-  high: string;
-  low: string;
-  close: string;
-  volume: string;
-  market_cap: string;
-}
-
-// apexchart
+import { fetchCoinHistory } from "./api";
 import ApexChart from "react-apexcharts";
-const Price = () => {
-  const { coinId } = useParams();
-
-  // react-query
-  const { isLoading, data } = useQuery<IHistorical[]>(
-    ["pricewow", coinId],
-    () =>
-      // useOutletContext이용
-      // fetchCoinHistory(coinId)
-
-      // useParams이용해서 데이터넣기
-      fetchCoinHistory(coinId!)
-    // {
-    //   refetchInterval: 10000,
-    // }
+interface IHistorical {
+  time_open: string;
+  time_close: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  market_cap: number;
+}
+interface ChartProps {
+  coinId: string;
+}
+function Chart({ coinId }: ChartProps) {
+  const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
+    fetchCoinHistory(coinId)
   );
-
   return (
     <div>
       {isLoading ? (
-        "Loading Price..."
+        "Loading chart..."
       ) : (
         <ApexChart
-          type="candlestick"
+          type="line"
           series={[
             {
               name: "Price",
-              data: data.map((price) => ({
-                x: price.time_open * 1000,
-                y: [price.open, price.high, price.low, price.close],
-              })),
+              data: data?.map((price) => price.close) ?? [],
             },
           ]}
-          width="100%"
-          height="460px"
           options={{
+            theme: {
+              mode: "dark",
+            },
             chart: {
+              height: 300,
+              width: 500,
               toolbar: {
                 show: false,
               },
               background: "transparent",
-              fontFamily: '"Pretendard", sans-serif',
+            },
+            grid: { show: false },
+            stroke: {
+              curve: "smooth",
+              width: 4,
+            },
+            yaxis: {
+              show: false,
             },
             xaxis: {
-              // labels: {
-              //   show: false,
-              // },
+              axisBorder: { show: false },
+              axisTicks: { show: false },
+              labels: { show: false },
               type: "datetime",
-              categories: data.map((price) => price.time_close * 1000),
-              axisTicks: {
-                show: false,
-              },
-              axisBorder: {
-                show: false,
-              },
-              tooltip: {
-                enabled: false,
+              categories: data?.map((price) => price.time_close),
+            },
+            fill: {
+              type: "gradient",
+              gradient: { gradientToColors: ["#0be881"], stops: [0, 100] },
+            },
+            colors: ["#0fbcf9"],
+            tooltip: {
+              y: {
+                formatter: (value) => `$${value.toFixed(2)}`,
               },
             },
-            // yaxis: {
-            //   labels: {
-            //     show: false,
-            //   },
-            // },
-          }}
-          title={{
-            text: "CandleStick Chart",
-            align: "left",
           }}
         />
       )}
     </div>
   );
-};
-
-export default Price;
+}
+export default Chart;
