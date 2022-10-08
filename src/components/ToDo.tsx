@@ -3,34 +3,6 @@ import { useSetRecoilState } from "recoil";
 import { IToDo } from "../atoms";
 import { toDoState } from "../atoms";
 
-[
-  {
-    text: "bvn",
-    category: "TO_DO",
-    id: 1664802034846,
-  },
-  {
-    text: "fgh",
-    category: "TO_DO",
-    id: 1664802034452,
-  },
-  {
-    text: "gfh",
-    category: "TO_DO",
-    id: 1664802034004,
-  },
-  {
-    text: "bnmmbn",
-    category: "TO_DO",
-    id: 1664801988807,
-  },
-  {
-    text: "hgj",
-    category: "TO_DO",
-    id: 1664801987409,
-  },
-];
-
 const ToDo = ({ text, category, id }: IToDo) => {
   const setToDos = useSetRecoilState(toDoState);
 
